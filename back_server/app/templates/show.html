@@ -1,0 +1,38 @@
+{%extends "main.html"%}
+
+{%block title %}ARK{% endblock %}
+
+
+{% block content %}
+    <div class="container main">
+        <div class="row">
+            <div class="col-md-9 col-lg-9">
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>#</th>
+                                <th>操作系统</th>
+                                <th>容器链接</th>
+                                <th>容器名</th>
+                                <th>创建时间</th>
+                            </tr>
+                        </thead>
+
+                            {% for c_one in containers %}
+                                <tbody>
+                                    <th><span class=""></span></th>
+                                    <th >{{ c_one.id }}</th>
+                                    <th>{{ c_one.os_name }}</th>
+                                    <td><a target="blank" href="{{ c_one.ip }}">{{ c_one.ip }}</a></td>
+                                    <th>{{ c_one.container_name }}</th>
+                                    <th>{{ c_one.create_time }}</th>
+                                </tbody>
+                            {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
