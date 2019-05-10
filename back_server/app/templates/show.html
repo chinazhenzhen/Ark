@@ -5,17 +5,20 @@
 
 {% block content %}
     <div class="container main">
+        <div class="page-header">
+            <h1>{{ current_user.username }}的机器列表！</h1>
+        </div>
         <div class="row">
-            <div class="col-md-9 col-lg-9">
+            <div class="col-md-12 col-lg-12">
                 <div>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>#</th>
-                                <th>操作系统</th>
-                                <th>容器链接</th>
-                                <th>容器名</th>
+                                <th>ID</th>
+                                <th>操作系统类型</th>
+                                <th>操作系统链接</th>
+                                <th>系统名</th>
                                 <th>创建时间</th>
                             </tr>
                         </thead>

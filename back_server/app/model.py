@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask_login import UserMixin
 from .exts import db
 from passlib.apps import custom_app_context
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
@@ -12,9 +13,10 @@ class Container(db.Model):
     ip = db.Column(db.String(64))
     container_name = db.Column(db.String(64))
 
+    username = db.Column(db.String(32))
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True)
@@ -26,7 +28,9 @@ class User(db.Model):
 
     # 密码解析
     def verify_password(self, password):
-        return custom_app_context.verify(password, self.password)
+        if self.password == password:
+            return True
+        return False
 
     # 获取token，有效时间100min
     def generate_auth_token(self, expiration=6000):
