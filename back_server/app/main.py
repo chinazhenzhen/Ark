@@ -37,7 +37,7 @@ login_manager = LoginManager(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 login_manager.login_view = 'login'
-login_manager.login_message = 'Unauthorized User'
+login_manager.login_message = '未登陆用户'
 
 # container 管理器
 container_manager = ContainerManager()
@@ -104,6 +104,7 @@ def logout():
     flash('你已经成功退出登陆')
     return redirect(url_for('index'))
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -123,11 +124,13 @@ def register():
 
 @app.route('/about')
 def ark_about():
-    return jsonify("Ark--Linux教学实践系统")
+    return render_template('about.html')
+
 
 @app.route('/learn')
 def learn():
     return render_template('learn.html')
+
 
 @app.route('/container/create')
 @login_required
@@ -137,9 +140,9 @@ def container_create():
     webshell_port = ports['9000/tcp'] # 得到相关接口
     ip = 'http://{}:{}'.format('127.0.0.1', webshell_port)
     os_name = "ark:latest"
-    username = current_user.username
+    user_id = current_user.id
     #create_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    container = Container(os_name=os_name, ip=ip, container_name=container_name, username=username)
+    container = Container(os_name=os_name, ip=ip, container_name=container_name, user_id=user_id)
     db.session.add(container)
     db.session.commit()
 
@@ -147,8 +150,10 @@ def container_create():
 
     #return jsonify({'url': 'http://{}:{}'.format('127.0.0.1', webshell_port)})
 
+
 @app.route('/container/show')
 @login_required
 def container_show():
-    containers = Container.query.filter_by(username=current_user.username).all()
+    containers = Container.query.filter_by(user_id=current_user.id).all()
+    #containers = Container.query.filter_by(username=current_user.username).all()
     return render_template('show.html',containers=containers)

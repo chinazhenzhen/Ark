@@ -5,8 +5,10 @@
 </template>
 
 <script>
+import About from './About'
 export default {
-  name: 'Home'
+  name: 'Home',
+  components: {About}
 }
 </script>
 

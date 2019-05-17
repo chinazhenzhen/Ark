@@ -13,14 +13,16 @@ class Container(db.Model):
     ip = db.Column(db.String(64))
     container_name = db.Column(db.String(64))
 
-    username = db.Column(db.String(32))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # 外键，外键关联users表的id，我们还需要在User做关系关联
 
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'
+    __tablename__ = 'users'  # 表名
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True)
     password = db.Column(db.String(128))
+
+    containers = db.relationship("Container", backref='users') # containers表外键关系关联，Container 类名，backref='users' 声明关联users表
 
     # 密码加密
     def hash_password(self, password):

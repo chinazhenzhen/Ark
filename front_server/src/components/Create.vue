@@ -1,14 +1,14 @@
 <template>
   <div class="hello">
-    <h1>{{ msg["value"] }}</h1>
+    <h1>{{ msg["url"] }}</h1>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 
+import axios from 'axios'
 export default {
-  name: 'hello',
+  name: 'Create',
   data () {
     return {
       msg: '欢迎来到菜鸟教程！'
@@ -17,7 +17,7 @@ export default {
   /* ajax请求获得数据 */
   methods: {
     getMessage () {
-      const path = 'http://localhost:3000/'
+      const path = 'http://localhost:3000/container/create'
       axios.get(path)
         .then((res) => {
           this.msg = res.data
@@ -33,3 +33,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>

@@ -18,3 +18,6 @@ EXPOSE 9000
 # docker stop ark
 # docker rm ark
 # docker image rm ark
+
+# docker stop $(docker ps -a -q)
+# docker  rm $(docker ps -a -q)
