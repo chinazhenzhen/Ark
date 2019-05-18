@@ -1,4 +1,6 @@
-{%extends "main.html"%}
+{%extends "base.html"%}
+{% import "bootstrap/wtf.html" as wtf %}
+
 
 {%block title %}
     ARK-Linux学习平台
@@ -22,6 +24,7 @@
             <a target="blank" href="http://localhost:3000/container/create">
                 <button class="btn btn-lg btn-success">创建CentOS操作系统</button>
             </a>
+            {{ wtf.quick_form(form) }}
         {% endif %}
     </div>
 

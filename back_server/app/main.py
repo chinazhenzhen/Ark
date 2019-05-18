@@ -18,6 +18,7 @@ from .model import Container
 
 from .form import LoginForm
 from .form import RegisterForm
+from .form import OsSelectForm
 
 app = Flask(__name__)
 CORS(app)
@@ -45,7 +46,8 @@ container_manager = ContainerManager()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    form = OsSelectForm()
+    return render_template('index.html', form=form)
     # return jsonify({'value': "welcome ARK %s".format(g.user.username)}), 200
 
 

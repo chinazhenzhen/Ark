@@ -12,7 +12,7 @@ class ContainerManager(object):
 
     def create_container(self, image_name):
 
-        container_name = self.produce_container_name() # 我们需要确定这个参数
+        container_name = self.produce_container_name()  # 我们需要确定这个参数
         try:
             self.client.containers.run(
                 image=image_name,

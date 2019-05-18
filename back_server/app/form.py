@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, SelectField
 from wtforms.validators import DataRequired
 
 
@@ -17,3 +17,12 @@ class RegisterForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired()])
     password = PasswordField('密码', validators=[DataRequired()])
     submit = SubmitField('注册')
+
+
+class OsSelectForm(FlaskForm):
+    limit = SelectField(label='操作系统',
+                        choices=[('Centos7', 'Centos'),
+                                 ('Ubuntu14.04', 'Ubuntu'),
+                                 ('Ark', 'Ark')],
+                        default='Centos7')  # 权限
+    submit = SubmitField('创建')
