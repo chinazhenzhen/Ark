@@ -13,7 +13,48 @@ class Container(db.Model):
     ip = db.Column(db.String(64))
     container_name = db.Column(db.String(64))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # 外键，外键关联users表的id，我们还需要在User做关系关联
+    # 外键
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))  # 外键，外键关联users表的id，我们还需要在User做关系关联
+
+
+class Permission:
+    READ = 0x01  # 查看权限
+    CONTAINER = 0x02  # 容器操作权限
+    ADMIN = 0x04  # 管理员权限
+
+# 权限管理学习文档 https://blog.csdn.net/bird333/article/details/80919635
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    permissions = db.Column(db.Integer)
+    default = db.Column(db.Boolean, default=False, index=True)
+
+    # 声明外键
+    users = db.relationship('User', backref='role', lazy='dynamic')
+
+    @staticmethod
+    def insert_role():
+        roles = {
+            'BLACK_USER': (Permission.READ, True),
+            'USER': (Permission.READ |
+                     Permission.CONTAINER, False),
+            'ADMIN': (Permission.READ |
+                      Permission.CONTAINER |
+                      Permission.ADMIN, False)
+        }
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+            if role is None:
+                # 如果用户角色没有创建: 创建用户角色
+                role = Role(name=r)
+            role.permissions = roles[r][0]
+            role.default = roles[r][1]
+            db.session.add(role)
+        db.session.commit()
+
+    def __repr__(self):
+        return '<Role %r>' % self.name
 
 
 class User(db.Model, UserMixin):
@@ -21,8 +62,29 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True)
     password = db.Column(db.String(128))
-
+    # 外键
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    # 表明外键关系
     containers = db.relationship("Container", backref='users') # containers表外键关系关联，Container 类名，backref='users' 声明关联users表
+
+    def __init__(self, **kwargs):
+        '''构造函数：首先调用基类构造函数，如果创建基类对象后没定义角色，则根据email地址决定其角色'''
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            if self.email == "XXX":
+                self.role = Role.query.filter_by(permissions=0xff).first()
+            if self.role is None:
+                self.role = Role.query.filter_by(default=True).first()
+
+        def can(self, permissions):
+            # 检查permissions要求的权限角色是否允许
+            return self.role is not None and (self.role.permissions & permissions) == permissions
+
+        def is_administrator(self):
+            # 检查是否管理员
+            return self.can(Permission.ADMIN)
+
+
 
     # 密码加密
     def hash_password(self, password):

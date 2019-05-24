@@ -15,6 +15,7 @@ from services.container import ContainerManager
 
 from .model import User
 from .model import Container
+from .model import Role
 
 from .form import LoginForm
 from .form import RegisterForm
@@ -159,3 +160,10 @@ def container_show():
     containers = Container.query.filter_by(user_id=current_user.id).all()
     #containers = Container.query.filter_by(username=current_user.username).all()
     return render_template('show.html',containers=containers)
+
+
+# 创建数据库表相关
+@app.route('/create/role')
+def create_role():
+    Role.insert_role()
+    return redirect(url_for('index'))
