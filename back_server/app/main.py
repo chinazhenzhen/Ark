@@ -1,12 +1,17 @@
 from flask import Flask
 from flask import jsonify
 from flask import redirect, json, request, abort, g, render_template, url_for, flash
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.contrib.fileadmin import FileAdmin
+from flask_babelex import Babel
 from flask_cors import CORS
 from flask_httpauth import HTTPBasicAuth
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 import datetime
+import os
 
 
 from .exts import db
@@ -30,6 +35,17 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config["SECRET_KEY"] = "12345678"
 db.init_app(app)
+
+admin = Admin(app)
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Container, db.session))
+admin.add_view(ModelView(Role, db.session))
+admin.add_view(FileAdmin(os.path.join(os.path.dirname(__file__)), name='代码文件'))
+
+
+# 汉化
+babel = Babel(app)
+app.config['BABEL_DEFAULT_LOCALE'] = 'zh_CN'
 
 auth = HTTPBasicAuth()
 
@@ -113,7 +129,7 @@ def register():
     form = RegisterForm()
     user = User()
     if form.validate_on_submit():
-        if user.query_one_user(form.name.data) is not None:
+        if user.query_one_user(form.username.data) is not None:
             flash("用户名已经存在")
         else:
             user = User(username=form.username.data,

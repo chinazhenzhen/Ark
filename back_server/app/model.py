@@ -71,19 +71,21 @@ class User(db.Model, UserMixin):
         '''构造函数：首先调用基类构造函数，如果创建基类对象后没定义角色，则根据email地址决定其角色'''
         super(User, self).__init__(**kwargs)
         if self.role is None:
-            if self.email == "XXX":
+            if self.username == "admin":
                 self.role = Role.query.filter_by(permissions=0xff).first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
 
-        def can(self, permissions):
-            # 检查permissions要求的权限角色是否允许
-            return self.role is not None and (self.role.permissions & permissions) == permissions
+    def can(self, permissions):
+        # 检查permissions要求的权限角色是否允许
+        return self.role is not None and (self.role.permissions & permissions) == permissions
 
-        def is_administrator(self):
-            # 检查是否管理员
-            return self.can(Permission.ADMIN)
+    def is_administrator(self):
+        # 检查是否管理员
+        return self.can(Permission.ADMIN)
 
+    def query_one_user(self, username):
+        return self.query.filter_by(username=username).first()
 
 
     # 密码加密

@@ -1,32 +1,70 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 
-{%block title %}
+{% block title %}
     ARK-Linux学习平台
 {% endblock %}
 
 
 
 {% block content %}
-    <div class="container main">
-        {% for message in get_flashed_messages() %}
-            <div class="alert alert-warning alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
-            </button>
-            {{ message }}
-            </div>
-        {% endfor %}
-        <div class="page-header">
-            <h1>欢迎， {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}新用户{% endif %}！</h1>
-        </div>
-        {% if current_user.is_authenticated %}
-            <a target="blank" href="http://localhost:3000/container/create">
-                <button class="btn btn-lg btn-success">创建CentOS操作系统</button>
-            </a>
-            {{ wtf.quick_form(form) }}
-        {% endif %}
-    </div>
+    <!-- Jumbotron -->
+    <header class="jumbotron">
+        <img class="hidden" src="img/gulp.png" width="800" height="600">
+        <h1><span class="text-hide"><span><img class="logo" src="/static/img/gulp-white-text.svg"></span></span></h1>
+        <p class="lead">通过浏览器即可创建Linux系统，体验Linux的魔力。</p>
+        <p><a class="btn btn-lg btn-default btn-getting-started" href="{{ url_for('container_create',_external=True) }}" role="button">开始创建</a>
+        </p>
+    </header>
 
+    <main class="benefits container">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-6">
+                <h2>易于使用</h2>
+                <p>通过代码优于配置的策略，Gulp 让简单的任务简单，复杂的任务可管理。</p>
+            </div>
+            <div class="col-md-6">
+                <h2>构建快速</h2>
+                <p>利用 Node.js 流的威力，你可以快速构建项目并减少频繁的 IO 操作。</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>插件高质</h2>
+                <p>Gulp 严格的插件指南确保插件如你期望的那样简洁高质得工作。</p>
+            </div>
+            <div class="col-md-6">
+                <h2>易于学习</h2>
+                <p>通过最少的 API，掌握 Gulp 毫不费力，构建工作尽在掌握：如同一系列流管道。</p>
+            </div>
+        </div>
+    </main>
+
+
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; Ark-Linux实验平台 2018</p>
+            <p>
+            <ul class="list-inline">
+                <li><a href="http://www.bootcss.com/" target="_blank">Bootstrap中文网</a>
+                </li>
+                <li><a href="https://www.nodeapp.cn/" target="_blank">Nodejs中文文档</a>
+                </li>
+                <li><a href="https://www.jekyll.com.cn/" target="_blank">Jekyll中文网</a>
+                </li>
+                <li><a href="https://www.webpackjs.com/" target="_blank">Webpack中文文档</a>
+                </li>
+                <li><a href="https://www.quanzhanketang.com/" target="_blank">全栈课堂</a>
+                </li>
+                <li><a href="https://www.91php.com/" target="_blank">91PHP</a>
+                </li>
+            </ul>
+            </p>
+        </div>
+    </footer>
 
 {% endblock %}
+
