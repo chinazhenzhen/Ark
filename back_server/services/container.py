@@ -64,7 +64,6 @@ def create_container(u_port):
 
 if __name__ == "__main__":
     test = ContainerManager()
-    c_name = test.create_container("ark:latest")
-    print(c_name)
-    print(test.get_container_ports(c_name))
-    print(test.is_rm_container(c_name))
+    for i in range(100):
+        c_name = test.create_container("ark:latest")
+        print(c_name)
