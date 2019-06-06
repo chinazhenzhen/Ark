@@ -7,10 +7,17 @@
 {% block head %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+{#    <link href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">#}
     <script src="{{ url_for('static', filename='js/jquery-3.3.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+
 {% endblock %}
 
 {% block navbar %}
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  {% endif %}
+{% endwith %}
     <nav class="navbar navbar-inverse navbar-fixed-top site-navbar">
         <div class="container">
             <div class="navbar-header">
@@ -29,7 +36,7 @@
                     <li><a href="{{ url_for('container_show',_external=True) }}">机器列表</a></li>
                     <li><a href="{{ url_for('learn',_external=True) }}">学习资料</a></li>
                     <li><a href="{{ url_for('ark_about',_external=True) }}">关于</a></li>
-                    {% if current_user.is_authenticated %}
+                    {% if current_user.username == 'admin' %}
                         <li><a href="/admin">后台管理</a></li>
                     {% endif %}
                     {% if current_user.is_authenticated %}

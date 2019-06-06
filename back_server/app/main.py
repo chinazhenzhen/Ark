@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import jsonify
 from flask import redirect, json, request, abort, g, render_template, url_for, flash
-from flask_admin import Admin
+from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_babelex import Babel
@@ -117,7 +117,6 @@ def login():
 
 
 @app.route('/logout')
-@login_required
 def logout():
     logout_user()
     flash('你已经成功退出登陆')
@@ -127,17 +126,17 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-    user = User()
+    # user = User()
     if form.validate_on_submit():
-        if user.query_one_user(form.username.data) is not None:
-            flash("用户名已经存在")
-        else:
-            user = User(username=form.username.data,
-                        password=form.password.data)
-            flash("注册成功")
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('login'))
+        # if user.query_one_user(form.username.data) is not None:
+        #     flash("用户名已经存在")
+        # else:
+        user = User(username=form.username.data,
+                    password=form.password.data)
+        flash("注册成功")
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
 
@@ -154,11 +153,11 @@ def learn():
 @app.route('/container/create')
 @login_required
 def container_create():
-    container_name = container_manager.create_container("ark:latest")
+    container_name = container_manager.create_container("centos7:ark")
     ports = container_manager.get_container_ports(container_name)
     webshell_port = ports['9000/tcp'] # 得到相关接口
-    ip = 'http://{}:{}'.format('127.0.0.1', webshell_port)
-    os_name = "ark:latest"
+    ip = 'http://{}:{}'.format('10.204.2.62', webshell_port)
+    os_name = "centos7:ark"
     user_id = current_user.id
     #create_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     container = Container(os_name=os_name, ip=ip, container_name=container_name, user_id=user_id)

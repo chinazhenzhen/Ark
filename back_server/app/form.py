@@ -16,6 +16,7 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired()])
     password = PasswordField('密码', validators=[DataRequired()])
+    confirm_password = PasswordField('确认密码', validators=[DataRequired()])
     submit = SubmitField('注册')
 
 
