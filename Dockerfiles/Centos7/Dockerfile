@@ -26,3 +26,5 @@ EXPOSE 9000
 #### 创建测试容器
 #   docker run -p 9001:9000 --name test  -d centos7:ark
 
+# 启动容器进行调试 docker run -it centos /bin/bash
+

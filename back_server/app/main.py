@@ -156,7 +156,7 @@ def container_create():
     container_name = container_manager.create_container("centos7:ark")
     ports = container_manager.get_container_ports(container_name)
     webshell_port = ports['9000/tcp'] # 得到相关接口
-    ip = 'http://{}:{}'.format('10.204.2.62', webshell_port)
+    ip = 'http://{}:{}'.format('127.0.0.1', webshell_port)
     os_name = "centos7:ark"
     user_id = current_user.id
     #create_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
